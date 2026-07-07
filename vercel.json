@@ -1,3 +1,6 @@
 {
+  "installCommand": "cd staff-save && npm install --cache /tmp/npm-cache",
+  "buildCommand": "cd staff-save && npx vite build",
+  "outputDirectory": "staff-save/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
