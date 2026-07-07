@@ -67,8 +67,8 @@ export default function StaffHistory() {
         </Suspense>
       </div>
 
-      {/* History table */}
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+      {/* History table — desktop */}
+      <div className="hidden sm:block bg-white rounded-xl border border-gray-100 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
             <tr>
@@ -94,6 +94,33 @@ export default function StaffHistory() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* History cards — mobile */}
+      <div className="sm:hidden space-y-2">
+        {[...entries].reverse().map(e => (
+          <div key={e.id} className="bg-white rounded-xl border border-gray-100 px-4 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-semibold text-gray-800">{MONTHS[e.period_month - 1]} {e.period_year}</p>
+              <p className="text-sm font-bold font-mono text-brand-700">{formatNaira(e.running_balance)}</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div>
+                <p className="text-xs text-gray-400">Saved</p>
+                <p className="text-xs font-mono text-green-700">{formatNaira(e.savings_amount)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-400">Withdrawn</p>
+                <p className="text-xs font-mono text-red-500">{e.withdrawal_amount > 0 ? formatNaira(e.withdrawal_amount) : '—'}</p>
+              </div>
+              {e.notes && (
+                <div className="ml-auto">
+                  <p className="text-xs text-gray-400 text-right">{e.notes}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
