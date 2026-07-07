@@ -40,6 +40,8 @@ export default function WithdrawRequest() {
     load()
   }, [success])
 
+  const maxWithdrawal = Math.floor(balance * 0.6)
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!staffId) return
@@ -47,8 +49,8 @@ export default function WithdrawRequest() {
     setSubmitting(true)
 
     const kobo = Math.round(parseFloat(amount) * 100)
-    if (kobo <= 0 || kobo > balance) {
-      setError(`Amount must be between ₦1 and ${formatNaira(balance)}`)
+    if (kobo <= 0 || kobo > maxWithdrawal) {
+      setError(`Amount must be between ₦1 and ${formatNaira(maxWithdrawal)} (60% of balance)`)
       setSubmitting(false)
       return
     }
@@ -80,9 +82,16 @@ export default function WithdrawRequest() {
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-100 p-4 space-y-3">
-        <p className="text-sm font-medium text-gray-700">Request a Withdrawal</p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-gray-700">Request a Withdrawal</p>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          <p className="text-xs text-amber-800">
+            You can withdraw up to <span className="font-semibold">{formatNaira(maxWithdrawal)}</span> — 60% of your current balance.
+          </p>
+        </div>
         <div>
-          <label className="text-xs text-gray-500 mb-1 block">Amount (₦)</label>
+          <label className="text-xs text-gray-500 mb-1 block">Amount (₦) — max {formatNaira(maxWithdrawal)}</label>
           <input
             type="number" min="1" step="0.01" required
             value={amount} onChange={e => setAmount(e.target.value)}
