@@ -1,7 +1,5 @@
 {
-  "rootDirectory": "staff-save",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
+  "buildCommand": "cd staff-save && npm run build",
+  "outputDirectory": "staff-save/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
