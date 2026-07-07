@@ -69,26 +69,25 @@ export default function StaffDashboard() {
     <div className="space-y-4 pt-2">
 
       {/* Hero balance card */}
-      <div className="relative bg-gradient-to-br from-brand-800 via-brand-700 to-brand-600 rounded-3xl p-6 overflow-hidden shadow-xl shadow-brand-900/30">
-        {/* Decorative circles */}
+      <div className="relative bg-gradient-to-br from-brand-800 via-brand-700 to-brand-600 rounded-3xl p-5 overflow-hidden shadow-xl shadow-brand-900/30">
         <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
         <div className="absolute -bottom-12 -left-6 w-48 h-48 rounded-full bg-white/5" />
 
         <div className="relative">
           {/* Avatar + name */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-brand-400/40 border-2 border-brand-300/40 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">{initials(staff.full_name)}</span>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 shrink-0 rounded-full bg-brand-400/40 border-2 border-brand-300/40 flex items-center justify-center">
+              <span className="text-white font-bold text-xs">{initials(staff.full_name)}</span>
             </div>
-            <div>
-              <p className="text-white font-semibold text-sm leading-tight">{staff.full_name}</p>
-              <p className="text-brand-300 text-xs">{staff.role}</p>
+            <div className="min-w-0">
+              <p className="text-white font-semibold text-sm leading-tight truncate">{staff.full_name}</p>
+              <p className="text-brand-300 text-xs truncate">{staff.role}</p>
             </div>
           </div>
 
           {/* Balance */}
           <p className="text-brand-200 text-xs font-medium uppercase tracking-widest mb-1">Current Balance</p>
-          <p className="text-white text-4xl font-bold tracking-tight leading-none">{formatNaira(balance)}</p>
+          <p className="text-white text-3xl sm:text-4xl font-bold tracking-tight leading-none break-all">{formatNaira(balance)}</p>
           {asOf
             ? <p className="text-brand-300 text-xs mt-2">as of {asOf}</p>
             : <p className="text-brand-300 text-xs mt-2">No entries recorded yet</p>
@@ -96,20 +95,18 @@ export default function StaffDashboard() {
 
           {/* Mini stats row */}
           {entries.length > 0 && (
-            <div className="flex gap-4 mt-5 pt-5 border-t border-white/10">
+            <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-white/10">
               <div>
                 <p className="text-brand-300 text-[10px] uppercase tracking-wide">Total Saved</p>
-                <p className="text-white font-semibold text-sm mt-0.5">{formatNaira(totalSaved)}</p>
+                <p className="text-white font-semibold text-xs mt-0.5 break-all">{formatNaira(totalSaved)}</p>
               </div>
-              <div className="w-px bg-white/10" />
-              <div>
+              <div className="border-x border-white/10 px-2">
                 <p className="text-brand-300 text-[10px] uppercase tracking-wide">Withdrawn</p>
-                <p className="text-white font-semibold text-sm mt-0.5">{formatNaira(totalWithdrawn)}</p>
+                <p className="text-white font-semibold text-xs mt-0.5 break-all">{formatNaira(totalWithdrawn)}</p>
               </div>
-              <div className="w-px bg-white/10" />
-              <div>
+              <div className="pl-2">
                 <p className="text-brand-300 text-[10px] uppercase tracking-wide">Months</p>
-                <p className="text-white font-semibold text-sm mt-0.5">{entries.length}</p>
+                <p className="text-white font-semibold text-xs mt-0.5">{entries.length}</p>
               </div>
             </div>
           )}
