@@ -1,5 +1,3 @@
 {
-  "buildCommand": "cd staff-save && npm run build",
-  "outputDirectory": "staff-save/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
