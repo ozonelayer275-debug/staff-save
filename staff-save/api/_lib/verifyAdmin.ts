@@ -1,4 +1,4 @@
-import { supabaseAdmin } from './supabaseAdmin'
+import { supabaseAdmin } from './supabaseAdmin.js'
 
 // Verifies the caller's Supabase JWT and checks user_roles server-side via the
 // service-role client — never trust a client-claimed role for a privileged

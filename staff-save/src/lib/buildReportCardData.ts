@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { supabase as defaultClient } from '@/lib/supabase'
-import type { Term } from '@/lib/types'
-import type { ReportCardData } from '@/components/results/reportCardTypes'
+import { supabase as defaultClient } from './supabase.js'
+import type { Term } from './types.js'
+import type { ReportCardData } from '../components/results/reportCardTypes.js'
 
 const SCHOOL = {
   name: 'MORE-DAYS PRIVATE SCHOOL.',

@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { supabaseAdmin } from './_lib/supabaseAdmin'
-import { verifyPrintToken } from './_lib/printToken'
-import { buildReportCardData } from '../src/lib/buildReportCardData'
-import type { Term } from '../src/lib/types'
+import { supabaseAdmin } from './_lib/supabaseAdmin.js'
+import { verifyPrintToken } from './_lib/printToken.js'
+import { buildReportCardData } from '../src/lib/buildReportCardData.js'
+import type { Term } from '../src/lib/types.js'
 
 // Token-verified JSON feed for the chrome-less /print route. Deliberately
 // decoupled from Supabase auth entirely — PrintReportCard.tsx never

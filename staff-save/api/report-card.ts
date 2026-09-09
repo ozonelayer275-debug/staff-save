@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { verifyAdmin } from './_lib/verifyAdmin'
-import { supabaseAdmin } from './_lib/supabaseAdmin'
-import { mintPrintToken } from './_lib/printToken'
-import { launchChromium } from './_lib/chromium'
+import { verifyAdmin } from './_lib/verifyAdmin.js'
+import { supabaseAdmin } from './_lib/supabaseAdmin.js'
+import { mintPrintToken } from './_lib/printToken.js'
+import { launchChromium } from './_lib/chromium.js'
 
 export const config = { maxDuration: 30 }
 

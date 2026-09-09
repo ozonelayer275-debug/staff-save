@@ -3,8 +3,8 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "functions": {
-    "api/report-card.ts": { "memory": 1536, "maxDuration": 30 },
-    "api/batch-export.ts": { "memory": 2048, "maxDuration": 60 }
+    "api/report-card.ts": { "maxDuration": 30 },
+    "api/batch-export.ts": { "maxDuration": 60 }
   },
   "routes": [
     { "handle": "filesystem" },
