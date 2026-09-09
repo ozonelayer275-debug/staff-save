@@ -6,5 +6,8 @@
     "api/report-card.ts": { "memory": 1536, "maxDuration": 30 },
     "api/batch-export.ts": { "memory": 2048, "maxDuration": 60 }
   },
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
