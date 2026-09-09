@@ -23,13 +23,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const admin = supabaseAdmin()
 
-  const { data: cls } = await admin.from('results_classes').select('name, section').eq('id', classId).single()
+  const { data: cls } = await admin.from('results_classes').select('name, section')
+    .eq('id', classId)
+    .returns<{ name: string; section: string | null }[]>()
+    .single()
   if (!cls) return res.status(404).json({ error: 'Class not found' })
 
   const { data: reportCards } = await admin
     .from('results_report_cards').select('student_id, status')
     .eq('class_id', classId).eq('academic_session', academicSession).eq('term', term)
     .in('status', ['approved', 'locked'])
+    .returns<{ student_id: string; status: string }[]>()
 
   if (!reportCards || reportCards.length === 0) {
     return res.status(404).json({ error: 'No approved or locked report cards found for this class/term' })

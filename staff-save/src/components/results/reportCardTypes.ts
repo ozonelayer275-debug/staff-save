@@ -1,4 +1,4 @@
-import type { GradingScaleRow, ResultLevel, Term } from '@/lib/types'
+import type { GradingScaleRow, ResultLevel, Term } from '../../lib/types.js'
 
 export interface ReportCardSubjectRow {
   name: string

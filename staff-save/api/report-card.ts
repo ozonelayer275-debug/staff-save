@@ -26,6 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: reportCard } = await admin
     .from('results_report_cards').select('status')
     .eq('student_id', studentId).eq('academic_session', academicSession).eq('term', term)
+    .returns<{ status: string }[]>()
     .maybeSingle()
 
   if (!reportCard || !['approved', 'locked'].includes(reportCard.status)) {
@@ -34,7 +35,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { data: student } = await admin
     .from('results_students').select('first_name, last_name, reg_no_or_bece_no')
-    .eq('id', studentId).single()
+    .eq('id', studentId)
+    .returns<{ first_name: string; last_name: string; reg_no_or_bece_no: string }[]>()
+    .single()
   if (!student) return res.status(404).json({ error: 'Student not found' })
 
   const token = mintPrintToken(studentId, academicSession, term)

@@ -1,7 +1,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { supabase as defaultClient } from './supabase.js'
-import type { Term } from './types.js'
+import type { ClassRow, GradingScaleRow, ReportCardRow, ResultEntryRow, StudentRow, Term } from './types.js'
 import type { ReportCardData } from '../components/results/reportCardTypes.js'
+
+// Explicit .returns<T>() overrides throughout this file work around a
+// pre-existing gap in this project's hand-written Database type: the
+// Supabase client can't infer real row types from it (every query result
+// types as `never`), which esbuild silently ignores in the Vite client
+// build but Vercel's stricter server function build treats as a hard error.
+type StudentWithClass = StudentRow & { classes: ClassRow | null }
+type EntryWithSubject = ResultEntryRow & { subjects: { name: string; display_order: number } | null }
 
 const SCHOOL = {
   name: 'MORE-DAYS PRIVATE SCHOOL.',
@@ -11,35 +18,44 @@ const SCHOOL = {
   email: 'moredaysprivatesch20@gmail.com',
 }
 
-// Accepts an injected client so the exact same query/transform logic runs
-// client-side (anon key, RLS-scoped — on-screen preview) and server-side
-// (service-role key, RLS-bypassed — the /print route the PDF pipeline
-// navigates to). One implementation, no drift between preview and export.
+// Requires an injected client (no default) so the exact same query/transform
+// logic runs client-side (anon key, RLS-scoped — on-screen preview) and
+// server-side (service-role key, RLS-bypassed — the /print route the PDF
+// pipeline navigates to) — one implementation, no drift between preview and
+// export. Deliberately has no default client value: this file is pulled into
+// the Vercel serverless function build via api/print-data.ts, and a default
+// pointing at the client-side Supabase singleton would drag that singleton's
+// `import.meta.env` (Vite-only) usage into the server build too.
 export async function buildReportCardData(
-  studentId: string, academicSession: string, term: Term, supabase: SupabaseClient = defaultClient,
+  studentId: string, academicSession: string, term: Term, supabase: SupabaseClient,
 ): Promise<ReportCardData | null> {
   const [{ data: student }, { data: reportCard }, { data: entries }] = await Promise.all([
-    supabase.from('results_students').select('*, classes:results_classes(*)').eq('id', studentId).single(),
-    supabase.from('results_report_cards').select('*').eq('student_id', studentId).eq('academic_session', academicSession).eq('term', term).maybeSingle(),
-    supabase.from('results_entries').select('*, subjects:results_subjects(name, display_order)').eq('student_id', studentId).eq('academic_session', academicSession).eq('term', term),
+    supabase.from('results_students').select('*, classes:results_classes(*)').eq('id', studentId)
+      .returns<StudentWithClass[]>().single(),
+    supabase.from('results_report_cards').select('*').eq('student_id', studentId).eq('academic_session', academicSession).eq('term', term)
+      .returns<ReportCardRow[]>().maybeSingle(),
+    supabase.from('results_entries').select('*, subjects:results_subjects(name, display_order)').eq('student_id', studentId).eq('academic_session', academicSession).eq('term', term)
+      .returns<EntryWithSubject[]>(),
   ])
 
   if (!student) return null
-  const cls = (student as any).classes
+  const cls = student.classes
   if (!cls) return null
 
   const { data: gradingScale } = await supabase.from('results_grading_scales').select('*').eq('level', cls.level).order('display_order')
+    .returns<GradingScaleRow[]>()
 
   let promotedToClassName: string | null = null
   if (reportCard?.promoted_to_class_id) {
-    const { data: promotedClass } = await supabase.from('results_classes').select('name, section').eq('id', reportCard.promoted_to_class_id).single()
+    const { data: promotedClass } = await supabase.from('results_classes').select('name, section').eq('id', reportCard.promoted_to_class_id)
+      .returns<{ name: string; section: string | null }[]>().single()
     if (promotedClass) promotedToClassName = `${promotedClass.name}${promotedClass.section ? ` ${promotedClass.section}` : ''}`
   }
 
   const subjects = (entries ?? [])
     .slice()
-    .sort((a: any, b: any) => (a.subjects?.display_order ?? 0) - (b.subjects?.display_order ?? 0))
-    .map((e: any) => ({
+    .sort((a, b) => (a.subjects?.display_order ?? 0) - (b.subjects?.display_order ?? 0))
+    .map(e => ({
       name: e.subjects?.name ?? '—',
       test1: e.test1, test2: e.test2, exam: e.exam, total: e.total,
       grade: e.grade, remark: e.remark,

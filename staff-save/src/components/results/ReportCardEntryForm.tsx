@@ -57,7 +57,7 @@ export default function ReportCardEntryForm({ studentId, classId, academicSessio
       principal: rc?.principal_report ?? '',
     })
 
-    const data = await buildReportCardData(studentId, academicSession, term)
+    const data = await buildReportCardData(studentId, academicSession, term, supabase)
     setPreview(data)
     setLoading(false)
     hasLoadedOnceRef.current = true
@@ -106,7 +106,7 @@ export default function ReportCardEntryForm({ studentId, classId, academicSessio
     if (result.error) { setError(result.error.message); setSaveStatus('error'); return }
 
     setExisting(result.data)
-    const data = await buildReportCardData(studentId, academicSession, term)
+    const data = await buildReportCardData(studentId, academicSession, term, supabase)
     setPreview(data)
     setSaveStatus('saved')
     setTimeout(() => setSaveStatus(undefined), 2000)
