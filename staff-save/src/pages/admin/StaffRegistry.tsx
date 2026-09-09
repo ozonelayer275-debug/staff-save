@@ -148,6 +148,15 @@ export default function StaffRegistry() {
     fetchStaff()
   }
 
+  async function handleDelete(s: StaffRow) {
+    if (!confirm(
+      `Permanently delete ${s.full_name}?\n\nThis cannot be undone — it will also permanently delete all of their savings entries and withdrawal requests. If you just want to remove their access, use Deactivate instead.`
+    )) return
+    const { error: err } = await supabase.from('staff').delete().eq('id', s.id)
+    if (err) { alert(err.message); return }
+    fetchStaff()
+  }
+
   if (loading) return <div className="text-sm text-gray-400 py-8 text-center">Loading staff…</div>
 
   const unlinked = staff.filter(s => !s.auth_user_id)
@@ -225,6 +234,12 @@ export default function StaffRegistry() {
                     Link Account
                   </button>
                 )}
+                <button
+                  onClick={() => handleDelete(s)}
+                  className="text-xs text-red-600 hover:text-red-800 font-semibold text-right"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>

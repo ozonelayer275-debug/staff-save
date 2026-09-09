@@ -82,7 +82,7 @@ export default function SavingsEntryPage() {
       const gross = Math.round(parseFloat(row.gross_salary || '0') * 100)
       const savings = Math.round(parseFloat(row.savings_amount || '0') * 100)
       const withdrawal = Math.round(parseFloat(row.withdrawal_amount || '0') * 100)
-      if (gross === 0 && savings === 0) continue
+      if (gross === 0 && savings === 0 && withdrawal === 0) continue
 
       const prevBalance = await getPreviousBalance(row.staff.id)
       const running_balance = prevBalance + savings - withdrawal

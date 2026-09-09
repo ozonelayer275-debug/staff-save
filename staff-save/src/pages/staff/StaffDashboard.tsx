@@ -58,10 +58,6 @@ export default function StaffDashboard() {
   const latest = entries[0] ?? null
   const balance = latest?.running_balance ?? 0
   const asOf = latest ? `${MONTHS[latest.period_month - 1]} ${latest.period_year}` : null
-  const avgSaving = entries.length > 0
-    ? entries.reduce((s, e) => s + e.savings_amount, 0) / entries.length
-    : 0
-  const projected12 = balance + avgSaving * 12
   const totalSaved = entries.reduce((s, e) => s + e.savings_amount, 0)
   const totalWithdrawn = entries.reduce((s, e) => s + e.withdrawal_amount, 0)
 
@@ -112,40 +108,6 @@ export default function StaffDashboard() {
           )}
         </div>
       </div>
-
-      {/* Projection card */}
-      {avgSaving > 0 && (
-        <div className="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-1">12-Month Projection</p>
-              <p className="text-2xl font-bold text-stone-800">{formatNaira(projected12)}</p>
-              <p className="text-xs text-stone-400 mt-1">
-                Saving avg. <span className="font-medium text-stone-600">{formatNaira(avgSaving)}</span>/month
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center">
-              <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-              </svg>
-            </div>
-          </div>
-
-          {/* Progress bar */}
-          <div className="mt-4">
-            <div className="flex justify-between text-[10px] text-stone-400 mb-1.5">
-              <span>Now</span>
-              <span>12 months</span>
-            </div>
-            <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-brand-500 to-emerald-500 rounded-full transition-all"
-                style={{ width: `${Math.min((balance / projected12) * 100, 100)}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Recent activity */}
       {entries.length > 0 && (
