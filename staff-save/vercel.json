@@ -2,5 +2,9 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "functions": {
+    "api/report-card.ts": { "memory": 1536, "maxDuration": 30 },
+    "api/batch-export.ts": { "memory": 2048, "maxDuration": 60 }
+  },
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

@@ -58,7 +58,7 @@ export default function StaffHistory() {
   }))
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-lg mx-auto">
       {/* Chart */}
       <div className="bg-white rounded-xl border border-gray-100 p-4">
         <p className="text-xs font-medium text-gray-500 mb-3">Savings Growth</p>

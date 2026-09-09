@@ -66,7 +66,7 @@ export default function StaffDashboard() {
   const totalWithdrawn = entries.reduce((s, e) => s + e.withdrawal_amount, 0)
 
   return (
-    <div className="space-y-4 pt-2">
+    <div className="space-y-4 pt-2 max-w-lg mx-auto">
 
       {/* Hero balance card */}
       <div className="relative bg-gradient-to-br from-brand-800 via-brand-700 to-brand-600 rounded-3xl p-5 overflow-hidden shadow-xl shadow-brand-900/30">

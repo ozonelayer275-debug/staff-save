@@ -115,13 +115,13 @@ export default function AdminDashboard() {
     const rows = (entries ?? []).map(e =>
       `<tr><td>${MONTHS[e.period_month-1]} ${e.period_year}</td><td>₦${(e.gross_salary/100).toLocaleString()}</td><td>₦${(e.savings_amount/100).toLocaleString()}</td><td>${e.withdrawal_amount > 0 ? '₦'+(e.withdrawal_amount/100).toLocaleString() : '—'}</td><td><b>₦${(e.running_balance/100).toLocaleString()}</b></td><td>${e.notes??''}</td></tr>`
     ).join('')
-    const html = `<!DOCTYPE html><html><head><title>Statement — ${s.full_name}</title><style>body{font-family:system-ui,sans-serif;padding:32px;max-width:720px;margin:auto;color:#1c1917}h1{font-size:20px;margin-bottom:4px}p{font-size:13px;color:#57534e;margin:2px 0}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #e7e5e4;padding:9px 12px;text-align:left;font-size:13px}th{background:#fafaf9;font-weight:600;color:#44403c}.total{font-size:16px;font-weight:700;color:#3d1f07;margin-top:16px}@media print{button{display:none}}</style></head><body>
+    const html = `<!DOCTYPE html><html><head><title>Statement — ${s.full_name}</title><style>body{font-family:system-ui,sans-serif;padding:32px;max-width:720px;margin:auto;color:#1c1917}h1{font-size:20px;margin-bottom:4px}p{font-size:13px;color:#57534e;margin:2px 0}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #e7e5e4;padding:9px 12px;text-align:left;font-size:13px}th{background:#fafaf9;font-weight:600;color:#44403c}.total{font-size:16px;font-weight:700;color:#1a3318;margin-top:16px}@media print{button{display:none}}</style></head><body>
     <h1>MPS Staff Savings — Statement</h1>
     <p><b>${s.full_name}</b> · ${s.role}</p>
     <p>Generated: ${new Date().toLocaleDateString('en-NG', {day:'numeric',month:'long',year:'numeric'})}</p>
     <p class="total">Current Balance: ₦${(s.balance/100).toLocaleString('en-NG',{minimumFractionDigits:2})}</p>
     <table><thead><tr><th>Period</th><th>Gross Salary</th><th>Saved</th><th>Withdrawn</th><th>Balance</th><th>Notes</th></tr></thead><tbody>${rows}</tbody></table>
-    <br><button onclick="window.print()" style="margin-top:16px;padding:8px 20px;background:#a45c12;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px">Print Statement</button></body></html>`
+    <br><button onclick="window.print()" style="margin-top:16px;padding:8px 20px;background:#3f7d37;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px">Print Statement</button></body></html>`
     const w = window.open('', '_blank')
     w?.document.write(html)
     w?.document.close()

@@ -37,6 +37,15 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    to: '/admin/results', label: 'Results', end: false,
+    icon: (active: boolean) => (
+      <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 0 : 1.8} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.42A12.083 12.083 0 0121 15.5c0 1.24-.24 2.42-.68 3.5H3.68A11.94 11.94 0 013 15.5c0-1.68.42-3.26 1.16-4.64L12 14z"/>
+      </svg>
+    ),
+  },
 ]
 
 const PAGE_TITLES: Record<string, string> = {
@@ -44,6 +53,11 @@ const PAGE_TITLES: Record<string, string> = {
   '/admin/staff': 'Staff Registry',
   '/admin/savings': 'Savings Entry',
   '/admin/withdrawals': 'Withdrawals',
+  '/admin/results': 'Class Results',
+  '/admin/results/classes': 'Classes',
+  '/admin/results/subjects': 'Subjects',
+  '/admin/results/assignments': 'Assignments',
+  '/admin/results/review': 'Review Queue',
 }
 
 export default function AdminShell() {
@@ -57,10 +71,10 @@ export default function AdminShell() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f4f0] flex">
+    <div className="min-h-screen bg-canvas flex">
 
       {/* ── Desktop Sidebar ── */}
-      <aside className="hidden md:flex flex-col w-56 bg-[#3d1f07] shrink-0 fixed top-0 left-0 h-full z-20">
+      <aside className="hidden md:flex flex-col w-56 bg-brand-900 shrink-0 fixed top-0 left-0 h-full z-20">
         <div className="px-5 pt-6 pb-5 border-b border-white/10">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-brand-400 flex items-center justify-center shrink-0">
@@ -102,7 +116,7 @@ export default function AdminShell() {
       <div className="flex-1 md:ml-56 flex flex-col min-h-screen">
 
         {/* Top bar */}
-        <header className="sticky top-0 z-10 bg-[#f7f4f0]/90 backdrop-blur-sm border-b border-stone-200/60 px-4 md:px-6 h-14 flex items-center justify-between">
+        <header className="sticky top-0 z-10 bg-canvas/90 backdrop-blur-sm border-b border-stone-200/60 px-4 md:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             {/* Mobile: show logo mark */}
             <div className="md:hidden w-7 h-7 rounded-lg bg-brand-700 flex items-center justify-center">
@@ -130,7 +144,7 @@ export default function AdminShell() {
       </div>
 
       {/* ── Mobile Bottom Bar ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-[#3d1f07] border-t border-white/10 flex">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-brand-900 border-t border-white/10 flex">
         {NAV_ITEMS.map(({ to, label, end, icon }) => (
           <NavLink
             key={to}

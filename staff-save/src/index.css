@@ -2,19 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @theme {
-  --color-brand-50:  #fdf6ec;
-  --color-brand-100: #faeacc;
-  --color-brand-200: #f3cf95;
-  --color-brand-300: #e9ae55;
-  --color-brand-400: #dc8f28;
-  --color-brand-500: #c47518;
-  --color-brand-600: #a45c12;
-  --color-brand-700: #84470f;
-  --color-brand-800: #6a3810;
-  --color-brand-900: #3d1f07;
+  --color-brand-50:  #f3f9f2;
+  --color-brand-100: #e2f0de;
+  --color-brand-200: #c3e0ba;
+  --color-brand-300: #9dcb8d;
+  --color-brand-400: #74b364;
+  --color-brand-500: #549a48;
+  --color-brand-600: #3f7d37;
+  --color-brand-700: #33642e;
+  --color-brand-800: #2b5027;
+  --color-brand-900: #1a3318;
 
   --color-surface:   #ffffff;
-  --color-canvas:    #f7f4f0;
+  --color-canvas:    #f5f8f3;
 
   --font-sans: 'Inter', system-ui, sans-serif;
 

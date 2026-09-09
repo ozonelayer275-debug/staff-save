@@ -67,7 +67,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Right form panel */}
-      <div className="flex-1 flex items-center justify-center bg-[#f7f4f0] px-6 py-12">
+      <div className="flex-1 flex items-center justify-center bg-canvas px-6 py-12">
         <div className="w-full max-w-sm">
           <div className="lg:hidden flex items-center gap-2.5 mb-8">
             <div className="w-9 h-9 rounded-xl bg-brand-700 flex items-center justify-center">

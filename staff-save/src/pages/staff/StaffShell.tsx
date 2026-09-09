@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { useResultsAccess } from '@/hooks/useResultsAccess'
 
 const NAV = [
   {
@@ -28,8 +30,17 @@ const NAV = [
   },
 ]
 
+const RESULTS_ICON = (active: boolean) => (
+  <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 0 : 1.8} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.42A12.083 12.083 0 0121 15.5c0 1.24-.24 2.42-.68 3.5H3.68A11.94 11.94 0 013 15.5c0-1.68.42-3.26 1.16-4.64L12 14z"/>
+  </svg>
+)
+
 export default function StaffShell() {
   const navigate = useNavigate()
+  const results = useResultsAccess()
+  const [showDisabledNote, setShowDisabledNote] = useState(false)
 
   async function signOut() {
     await supabase.auth.signOut()
@@ -37,10 +48,10 @@ export default function StaffShell() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f4f0] flex flex-col">
+    <div className="min-h-screen bg-canvas flex flex-col">
       {/* Header */}
       <header className="bg-gradient-to-r from-brand-900 to-brand-700 px-4 pt-10 pb-6">
-        <div className="flex items-center justify-between max-w-lg mx-auto">
+        <div className="flex items-center justify-between max-w-lg sm:max-w-3xl lg:max-w-6xl mx-auto">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-lg bg-brand-400 flex items-center justify-center">
               <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -60,14 +71,30 @@ export default function StaffShell() {
 
       {/* Page content */}
       <main className="flex-1 pb-24 -mt-2">
-        <div className="max-w-lg mx-auto px-4">
+        <div className="max-w-lg sm:max-w-3xl lg:max-w-6xl mx-auto px-4">
           <Outlet />
         </div>
       </main>
 
+      {/* Disabled-results explainer toast */}
+      {showDisabledNote && (
+        <div className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-4" onClick={() => setShowDisabledNote(false)}>
+          <div className="bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl w-full max-w-sm p-5 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <p className="font-semibold text-stone-800 text-sm mb-1">Results access disabled</p>
+            <p className="text-sm text-stone-500">
+              You're assigned to {results.assignments.length === 1 ? 'a class' : 'class(es)'}, but the admin has
+              temporarily disabled Results access. Contact your admin if you believe this is a mistake.
+            </p>
+            <button onClick={() => setShowDisabledNote(false)} className="mt-4 w-full bg-brand-600 text-white text-sm py-2.5 rounded-lg hover:bg-brand-700">
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-20">
-        <div className="bg-white/95 backdrop-blur-md border-t border-stone-200/60 flex max-w-lg mx-auto">
+        <div className="bg-white/95 backdrop-blur-md border-t border-stone-200/60 flex max-w-lg sm:max-w-3xl lg:max-w-6xl mx-auto">
           {NAV.map(({ to, label, icon }) => (
             <NavLink
               key={to}
@@ -87,6 +114,35 @@ export default function StaffShell() {
               )}
             </NavLink>
           ))}
+
+          {/* Results: omitted entirely with no assignment; grayed+explained if assigned-but-disabled; normal link if enabled */}
+          {!results.loading && results.hasAnyAssignment && (
+            results.hasAnyEnabled ? (
+              <NavLink
+                to="/dashboard/results"
+                className={({ isActive }) =>
+                  `flex-1 flex flex-col items-center justify-center py-3 gap-1 transition-colors ${
+                    isActive ? 'text-brand-700' : 'text-stone-400 hover:text-stone-600'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {RESULTS_ICON(isActive)}
+                    <span className={`text-[10px] font-semibold tracking-wide ${isActive ? 'text-brand-700' : 'text-stone-400'}`}>Results</span>
+                  </>
+                )}
+              </NavLink>
+            ) : (
+              <button
+                onClick={() => setShowDisabledNote(true)}
+                className="flex-1 flex flex-col items-center justify-center py-3 gap-1 text-stone-300"
+              >
+                {RESULTS_ICON(false)}
+                <span className="text-[10px] font-semibold tracking-wide text-stone-300">Results</span>
+              </button>
+            )
+          )}
         </div>
       </nav>
     </div>
